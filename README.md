@@ -39,15 +39,15 @@ We integrated this with **Azure DevOps** to:
 - Azure Storage account with public blob endpoint (for this POC)
 
 ### Structure
-
+```
 cicd/
 └── pipelines/
 ├── deploy_notebook.yaml
 └── pr-validation.yaml
 
 dev/
-└── ingest/
-└── 01_ingestion.py # Ingests CSV from URLs and saves as Delta tables
+├── ingest/
+│ └── 01_ingestion.py # Ingests CSV from URLs and saves as Delta tables
 └── transform/
 └── 01_transformation.py # Computes runway stats and airport counts
 
@@ -77,7 +77,8 @@ infra/
 ├── main.tf
 ├── README.md
 ├── variables.tf
-
+└── versions.tf
+```
 ### Terraform IaC
 
 The infrastructure is defined using **Terraform** with the following components:
@@ -92,7 +93,7 @@ The following environment variables are required for the Terraform deployment:
 - `CLIENT_SECRET`: Azure Service Principal Client Secret
 - `PRODUCT_CONFIGURATION_FILE`: Path to the product configuration file (e.g., `infra/terraform/_config_files/product_configuration.yaml`) 
 
-Some componentes of the infrastrucutre have been pre implemented before terraform was used, such as virtual network, storage account for remote state. The Terraform code is designed to be idempotent, meaning it can be run multiple times without causing issues. 
+Some componentes of the infrastrucutre have been pre implemented before terraform was used, such as virtual network, storage account for remote. The Terraform code is designed to be idempotent, meaning it can be run multiple times without causing issues.
 
 
 
