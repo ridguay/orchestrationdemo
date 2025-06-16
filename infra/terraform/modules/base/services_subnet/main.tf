@@ -7,25 +7,6 @@ resource "azurerm_network_security_group" "firewall" {
 
 }
 
-resource "azurerm_network_security_rule" "allow_ir_remote_access" {
-  resource_group_name         = data.azurerm_virtual_network.virtual_network.resource_group_name
-  network_security_group_name = azurerm_network_security_group.firewall.name
-  name                        = "AllowIntegrationRuntimeRemoteAccess"
-  priority                    = 2000
-
-  access                     = "Allow"
-  direction                  = "Inbound"
-  protocol                   = "Tcp"
-  source_port_range          = "*"
-  source_address_prefix      = "*"
-  destination_port_ranges    = ["443", "8060"]
-  destination_address_prefix = var.subnet_address_prefix
-
-  depends_on = [
-    azurerm_network_security_group.firewall
-  ]
-}
-
 resource "azurerm_subnet" "subnet" {
   name                 = var.subnet_name
   resource_group_name  = data.azurerm_virtual_network.virtual_network.resource_group_name

@@ -19,4 +19,4 @@ df_runways = (spark.read.option("header", True)
               .csv(runways_url))
 df_runways.write.format("delta").mode("overwrite").saveAsTable("airports_db.runways")
 
-print("✅ Ingesta dinámica completada")
+print("Ingestion complete. Data saved as Delta tables in the airports_db database.")

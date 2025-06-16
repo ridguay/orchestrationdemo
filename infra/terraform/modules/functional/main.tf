@@ -21,7 +21,6 @@ module "databricks" {
   cluster__minimum_workers             = var.databricks_functional_vars.cluster_config.minimum_workers
   cluster__maximum_workers             = var.databricks_functional_vars.cluster_config.maximum_workers
   cluster__extra_spark_configuration   = var.databricks_functional_vars.cluster_config.extra_spark_configuration
-  cluster__pypi_packages               = setsubtract(var.databricks_functional_vars.cluster_pypi_packages, ["pydantic==2.3.0"])
   cluster__runtime_engine              = var.databricks_functional_vars.cluster_config.runtime_engine
   cluster__unity_catalog_volume_name                   = var.databricks_functional_vars.cluster_unity_catalog_volume_name
   cluster__unity_catalog_volume_storage_account_name   = var.databricks_functional_vars.cluster_unity_catalog_volume_storage_account_name
@@ -41,30 +40,5 @@ module "databricks" {
   ]
 }
 
-
-### ROLE ASSIGNMENTS ###
-module "databricks_role_assignments" {
-  source = "./role_assignments"
-
-  count = var.databricks_role_assignments_vars == null ? 0 : 1
-
-  resource_ids         = var.databricks_role_assignments_vars.resource_ids
-  user_principal_roles = var.databricks_role_assignments_vars.user_principal_roles
-
-
-
-}
-
-
-module "storage_role_assignments" {
-  source = "./role_assignments"
-
-  count = var.storage_role_assignments_vars == null ? 0 : 1
-
-  resource_ids         = var.storage_role_assignments_vars.resource_ids
-  user_principal_roles = var.storage_role_assignments_vars.user_principal_roles
-  principal_id_roles = var.storage_role_assignments_vars.principal_id_roles
-
-}
 
 

@@ -1,6 +1,6 @@
 # Eneco Data Pipeline POC
 
-This repository contains a **proof of concept (POC)** data pipeline for Eneco, demonstrating how to build and orchestrate data ingestion, transformation, and automation using **Azure Databricks** and **Azure DevOps**.
+This repository contains a **proof of concept (POC)** data pipeline for Eneco, demonstrating how to build and orchestrate data ingestion, transformation, and automation using **Azure Databricks** and **Azure DevOps**. Infra code contains the necessary Terraform configurations to set up the required Azure resources, including Databricks, storage, and networking.
 
 ## Overview
 
@@ -76,6 +76,24 @@ infra/
 │ ├── README.md
 │ ├── variables.tf
 │ └── versions.tf
+
+### Terraform IaC
+
+The infrastructure is defined using **Terraform** with the following components:
+- **Storage Account**: For storing raw and processed data
+- **Databricks Workspace**: For running notebooks and jobs 
+- **Networking**: Virtual network and subnets for secure access
+- **Unity Catalog**: For data governance and access control
+
+The following environment variables are required for the Terraform deployment:
+- `TFSTATE_SUBSCRIPTION_ID`:  Azure Subscription ID
+- `TFSTATE_RESOURCE_GROUP_NAME`: Azure Resource Group for Terraform state
+- `CLIENT_SECRET`: Azure Service Principal Client Secret
+- `PRODUCT_CONFIGURATION_FILE`: Path to the product configuration file (e.g., `infra/terraform/_config_files/product_configuration.yaml`) 
+
+Some componentes of the infrastrucutre have been pre implemented before terraform was used, such as virtual network, storage account for remote state. The Terraform code is designed to be idempotent, meaning it can be run multiple times without causing issues. 
+
+
 
 ### CI/CD Pipelines
 

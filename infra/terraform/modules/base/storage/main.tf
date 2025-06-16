@@ -1,7 +1,7 @@
 resource "azurerm_storage_account" "storage" {
   name                     = var.storage_account_name
   resource_group_name      = var.resource_group_name
-  location                 = "West Europe" # or use var.location if defined
+  location                 = "West Europe" 
   account_tier             = "Standard"
   account_replication_type = "LRS"
   is_hns_enabled           = true  # Required for ADLS Gen2
@@ -11,7 +11,7 @@ resource "azurerm_storage_account" "storage" {
   }
 
   network_rules {
-    default_action = "Allow" # Or "Deny" + allow Databricks subnet
+    default_action = "Allow" 
   }
 
   tags = var.tags

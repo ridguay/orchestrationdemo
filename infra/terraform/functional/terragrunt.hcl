@@ -63,15 +63,6 @@ inputs = {
     workspace_url = "https://${dependency.base.outputs.databricks__workspace_url}"
     env_domain    = "${include.root.locals.env_variables.env_name}-${include.root.locals.product_variables.abbreviation}"
 
-    # Notebook Mounting Secrets
-    notebook_mounting_secret_scope = "terraform"
-    notebook_mounting_secrets = {
-      "adls-client-id"  = include.root.locals.env_variables.client_id
-      "adls-client-key" = include.root.locals.env_secrets.client_secret
-      "adls-tenant-id"  = include.root.locals.env_variables.tenant_id
-      "adls-st-name"    = dependency.base.outputs.storage__storage_account_name
-    }
-
     # Variables for Primary Cluster(s)
     cluster_name          = "cluster_main"
     cluster_config        = include.root.locals.infrastructure_configuration.databricks_main_clusters
