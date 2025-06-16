@@ -44,11 +44,13 @@ cicd/
 └── pipelines/
 ├── deploy_notebook.yaml
 └── pr-validation.yaml
+
 dev/
-├── ingest/
-│ └── 01_ingestion.py # Ingests CSV from URLs and saves as Delta tables
+└── ingest/
+└── 01_ingestion.py # Ingests CSV from URLs and saves as Delta tables
 └── transform/
 └── 01_transformation.py # Computes runway stats and airport counts
+
 infra/
 └── terraform/
 ├── _config_files/
@@ -59,23 +61,22 @@ infra/
 ├── functional/
 │ ├── .terraform.lock.hcl
 │ └── terragrunt.hcl
-├── modules/
-│ ├── base/
-│ │ ├── databricks/
-│ │ ├── services_subnet/
-│ │ ├── storage/
-│ │ ├── main.tf
-│ │ ├── outputs.tf
-│ │ ├── README.md
-│ │ ├── variables.tf
-│ │ └── versions.tf
-│ └── functional/
+└── modules/
+├── base/
 │ ├── databricks/
-│ ├── locals.tf
+│ ├── services_subnet/
+│ ├── storage/
 │ ├── main.tf
+│ ├── outputs.tf
 │ ├── README.md
 │ ├── variables.tf
 │ └── versions.tf
+└── functional/
+├── databricks/
+├── locals.tf
+├── main.tf
+├── README.md
+├── variables.tf
 
 ### Terraform IaC
 
