@@ -1,0 +1,44 @@
+environment_variables:
+  env_name: "dev"
+  container_name: "dev-eneco"
+  client_id: "7b42d223-56fa-40d1-9584-d0a1b0a5a2cd"
+  subscription_id: "e33ea041-20fd-41f2-bf8a-d40f21a438d0"
+  tenant_id: "39f6a90e-1229-4b82-9501-98cbdc500cfd"
+  subscription_object_ids:
+    dev: "bc1751f6-168a-4c80-bba0-3278b109fae9"
+  virtual_network_data:
+    name: "VN-eneco"
+    resource_group_name: "eneco-demo"
+  tags:
+    environment: "dev"
+    product: "eneco"
+    owner: "michel"
+    cost_center: "12345"
+    project: "eneco-dev"
+devops_engineers:
+  - michel
+
+infrastructure_configuration:
+  uc_enabled: true
+  databricks_main_clusters:
+    spark_version_id: "15.4.x-scala2.12"
+  databricks_pypi_packages: []
+
+product_variables:
+  name: "eneco"
+  abbreviation: "enc"
+  entra_group_names:
+    use_catalog: ""
+  ip_addresses:
+    services_subnet: "10.0.0.0/27"
+    databricks_public_subnet: "10.0.0.32/27"
+    databricks_private_subnet: "10.0.0.64/27"
+    databricks_private_endpoint: "10.0.0.7"
+    storage_dfs_private_endpoint: "10.0.0.5"
+    storage_blob_private_endpoint: "10.0.0.6"
+
+users:
+  data_engineers:
+    dataengineer_1: "858f9a2d-3fc7-494b-a5e7-f904ee1caa8a"
+  devops_engineers:
+    devops_1: "0b348679-d3d1-4cc4-abea-d9165f50f0d5"

@@ -1,0 +1,36 @@
+pr:
+  branches:
+    include:
+    - main  # Or your target branch for PRs
+    - develop
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+- group: databricks-secrets # Variable group with DATABRICKS_HOST and DATABRICKS_TOKEN
+
+stages:
+- stage: TestDatabricksCode
+  displayName: 'Test Databricks PR Code'
+  jobs:
+  - job: RunTests
+    displayName: 'Run tests and lint checks'
+    steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '3.x'
+
+    - script: |
+        python -m pip install --upgrade pip
+        pip install databricks-cli pytest pylint
+      displayName: 'Install dependencies'
+
+    - script: |
+        pylint 02_transform.py
+      displayName: 'Run linting on transform script'
+
+    # Validate Databricks CLI config (no deploy)
+    - script: |
+        databricks --version
+      displayName: 'Check Databricks CLI is installed'

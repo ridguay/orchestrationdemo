@@ -1,0 +1,82 @@
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - dev/ingest/**
+      - dev/transform/**
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+- group: databricks-secrets # Variable group with DATABRICKS_HOST and DATABRICKS_TOKEN
+
+stages:
+- stage: DeployDatabricksJobs
+  displayName: 'Deploy Databricks Jobs'
+  jobs:
+  - job: UploadAndDeploy
+    displayName: 'Upload Notebooks and Deploy Jobs'
+    steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '3.x'
+
+    - script: |
+        pip install databricks-cli
+      displayName: 'Install Databricks CLI'
+
+    - script: |
+        databricks configure --token << EOF
+        $(DATABRICKS_HOST)
+        $(DATABRICKS_TOKEN)
+        EOF
+      displayName: 'Configure Databricks CLI'
+
+    # Upload ingestion notebook if changed
+    - script: |
+        if git diff --name-only $(System.PullRequest.SourceCommitId) $(System.PullRequest.TargetCommitId) | grep "^dev/ingest/"; then
+          echo "Ingestion code changed. Uploading ingestion notebook..."
+          databricks workspace import --overwrite --language PYTHON dev/ingest/01_ingestion.py /Shared/01_ingestion.py
+          
+          echo "Creating/updating ingestion job..."
+          databricks jobs create --json '{
+            "name": "ingestion-job",
+            "existing_cluster_id": "$(CLUSTER_ID)",
+            "notebook_task": {
+              "notebook_path": "/Shared/01_ingestion.py"
+            },
+            "schedule": {
+              "quartz_cron_expression": "0 2 * * * ?",
+              "timezone_id": "UTC"
+            }
+          }'
+        else
+          echo "No ingestion changes detected."
+        fi
+      displayName: 'Handle Ingestion Notebook'
+
+    # Upload transformation notebook if changed
+    - script: |
+        if git diff --name-only $(System.PullRequest.SourceCommitId) $(System.PullRequest.TargetCommitId) | grep "^dev/transform/"; then
+          echo "Transformation code changed. Uploading transformation notebook..."
+          databricks workspace import --overwrite --language PYTHON dev/transform/01_transformation.py /Shared/01_transformation.py
+
+          echo "Creating/updating transformation job..."
+          databricks jobs create --json '{
+            "name": "transform-job",
+            "existing_cluster_id": "<cluster-id>",
+            "notebook_task": {
+              "notebook_path": "/Shared/01_transformation.py"
+            },
+            "schedule": {
+              "quartz_cron_expression": "0 3 * * * ?",
+              "timezone_id": "UTC"
+            }
+          }'
+        else
+          echo "No transformation changes detected."
+        fi
+      displayName: 'Handle Transformation Notebook'
